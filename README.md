@@ -2,6 +2,7 @@
 
 ## project setup
 npm install
+npn init
 npm i -S body-parser
 npm i -S express
 npm i -S jwt-simple
