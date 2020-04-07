@@ -8,7 +8,7 @@ function getMessagesbyChat(req,res){
 
     Message.find({chatId:chatid},(err,messages)=>{
         if (err) return res.status(500).send({message: 'error al realizar la peticion'})
-        if(!account) return res.status(404).send({message:'no hay mensajes'})
+        if(!account) return res.status(404).send({message:'no hay mensajes en este chat'})
 
         res.status(200).send({messages})
     })
@@ -31,15 +31,24 @@ function getMessagebyOwnerandChat(req,res){
     let ChatId = req.body.ChatId
 
     Message.find({owner:Owner,chatId:ChatId},(err,messages)=>{
-        if(err) return res.status(200).send({message:`error en el servidor: ${err}`})
-        if(!messages) return res.status(200).send({message:`no hay mensajes`})
+        if(err) return res.status(500).send({message:`error en el servidor: ${err}`})
+        if(!messages) return res.status(404).send({message:`no hay mensajes`})
 
         res.status(200).send({messages})
     })
 }
 
-function sendMessage(req,res){
-    console.log(req.body)
+function getMessagebyId(req,res){
+    let messageId = req.body._id
+    Message.findById(messageId,(err,message)=>{
+        if(err) return res.status(500).send({message:`error en el servidor ${err}`})
+        if(!message) return res.status(404).send({message:`mensaje no encontrado`})
+
+        res.status(200).send({message})
+    })
+}
+
+function createMessage(req,res){
 
     let message = new Message()
     message.owner = req.body.owner
@@ -49,11 +58,11 @@ function sendMessage(req,res){
     message.save((err,messageStrored) =>{
         if(err) res.status(500).send({message: `error al salvar en la base de datos: ${err}`})
 
-        res.status(200).send({message: messageStrored})
+        res.status(200).send({messageStrored})
     })
 }
 
-function deleteMessage(req,res){
+function deleteMessagebyId(req,res){
 
     let messageId = req.body._id
 
@@ -65,7 +74,6 @@ function deleteMessage(req,res){
             if(err) return res.status(500).send({message:'error al borrar el mensaje'})
 
             res.status(200).send({message:'mensaje eliminado correctamente'})
-            
         })
     })
 }
@@ -74,6 +82,7 @@ module.exports={
     getMessagesbyChat,
     getMessagesbyOwner,
     getMessagebyOwnerandChat,
-    sendMessage,
-    deleteMessage
+    getMessagebyId,
+    createMessage,
+    deleteMessagebyId
 }

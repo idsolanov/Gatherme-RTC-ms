@@ -4,18 +4,18 @@ const Schema = mongoose.Schema
 
 const ChatSchema= Schema({
     
-    email_1:{
+    nickName1:{
         type: String,
         lowercase:true
     },
-    email_2:{
+    nickName2:{
         type:String,
         lowercase:true
 
     },
-    creationDate:{
+    creationDate: {
         type:Date,
-        default:Date.now()
+        default: Date.now()
     }
 })
 
