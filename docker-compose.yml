@@ -1,15 +1,15 @@
 version: '3'
 services:
-    gatherme-RTC-ms:
-        container_name: gatherme-RTC-ms
+    gatherme-rtc-ms:
+        container_name: gatherme-rtc-ms
         build: .
         restart: always
         ports:
             - '3002:3002'
         links: 
-            - gatherme-RTC-db
-    gatherme-RTC-db:
-        container_name: gatherme-RTC-db
+            - gatherme-rtc-db
+    gatherme-rtc-db:
+        container_name: gatherme-rtc-db
         image: mongo
         ports: 
             - '27018:27017'
