@@ -53,16 +53,14 @@ function createChat(req,res){
     chat.nickName1=req.body.nickName1
     chat.nickName2=req.body.nickName2
 
-    Chat.find({nickName1:req.body.nickName1,nickName2:req.body.nickName2},(err,chat)=>{
-        if(err) return res.status(500).send({message: `error en el servidor ${err}`})
-        if(chat)return res.status(503).send({message:'el chat ya existe'})
+    
 
         chat.save((err,chatStrored) =>{
             if(err) res.status(500).send({message: `error al salvar en la base de datos: ${err}`})
     
             res.status(200).send({chatStrored})
         })
-    })
+
 
     
 }
