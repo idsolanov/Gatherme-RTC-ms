@@ -4,7 +4,7 @@ const Message = require('../models/message')
 
 function getMessagesbyChat(req,res){
 
-    let chatid = req.body.chatId
+    let chatid = req.params.chatId
 
     Message.find({chatId:chatid},(err,messages)=>{
         if (err) return res.status(500).send({message: 'error al realizar la peticion'})
@@ -16,7 +16,7 @@ function getMessagesbyChat(req,res){
 
 function getMessagesbyOwner(req,res){
 
-    let Owner = req.body.owner
+    let Owner = req.params.owner
 
     Message.find({owner:Owner},(err,messages)=>{
 
@@ -39,7 +39,7 @@ function getMessagebyOwnerandChat(req,res){
 }
 
 function getMessagebyId(req,res){
-    let messageId = req.body._id
+    let messageId = req.params._id
     Message.findById(messageId,(err,message)=>{
         if(err) return res.status(500).send({message:`error en el servidor ${err}`})
         if(!message) return res.status(404).send({message:`mensaje no encontrado`})
@@ -64,7 +64,7 @@ function createMessage(req,res){
 
 function deleteMessagebyId(req,res){
 
-    let messageId = req.body._id
+    let messageId = req.params._id
 
     Message.findById(messageId,(err,message)=>{
         if(err) return res.status(500).send({message:'error al conectar con el servidor'})

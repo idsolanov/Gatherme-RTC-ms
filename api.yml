@@ -1,0 +1,247 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Real Time Chat microservice
+  description: the Real Time Chat microservice for Gatherme
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+host: host:3002
+basePath: /
+schemes: 
+  - http
+consumes: 
+  - application/json
+produces: 
+  - application/json
+paths:
+  /chat:
+    post:
+      summary: create a chat register in the data base
+      parameters:
+        - name: chat
+          in: body
+          required: true
+          description: chat object
+          schema:
+            $ref: '#/definitions/ChatInput'
+      responses:
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+        '501':
+          description: chat already exists
+          schema:
+            $ref: '#/definitions/Error'
+        '200':
+          description: created
+          schema:
+            $ref: '#/definitions/Chat'
+  /chat/{:id}:
+    get:
+      summary: get a chat by id
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+          description: an integer with the id
+      responses:
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Error'
+        '200':
+          description: finded
+          schema:
+            $ref: '#/definitions/Chat'
+      
+    delete:
+      summary: delete a chat by id
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+          description: an integer with the id
+      responses:
+        '500':
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Error'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Error'
+        '200':
+          description: chat deleted 
+          schema:
+            $ref: '#/definitions/Error'
+          
+  /chats/{:nickName}:
+    get: 
+      summary: get all chats by a nickname given
+      parameters:
+        - name: nickname
+          type: string
+          in: path
+          required: true
+          description: an string with the nickname 
+      responses:
+        '500':
+          description: Internal Server error
+          schema:
+            $ref: '#/definitions/Error'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Error'
+        '200':
+          description: finded
+          schema:
+            $ref: '#/definitions/listChats'
+  /message:
+    post:
+      summary: create a message
+      parameters:
+        - name: message
+          in: body
+          required: true
+          description: an message object
+          schema:
+            $ref: '#/definitions/MessageInput'
+      responses:
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+        '200':
+          description: created
+          schema:
+            $ref: '#/definitions/Message'
+  /message/{:id}:
+    get:
+      summary: get a message by id
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+          description: an string of id
+      responses:
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Error'
+        '200':
+          description: finded
+          schema:
+            $ref: '#/definitions/Message'
+    delete:
+      summary: delete a message by id
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+          description: an string of id
+      responses:
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+        '404':
+          description: not found
+          schema: 
+            $ref: '#/definitions/Error'
+        '200':
+          description: deleted 
+          schema:
+            $ref: '#/definitions/Error'
+  /messages/{:chatId}:
+    get:
+      summary: get a list of messages by chatId
+      parameters:
+        - name: chatId
+          type: string
+          in: path
+          required: true
+          description: an string of chatId
+      responses:
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+        '404':
+          description: not found
+          schema:
+            $ref: '#/definitions/Error'
+        '200':
+          description: finded
+          schema:
+            $ref: '#/definitions/listMessage'
+      
+definitions:
+  Chat:
+    type: object
+    properties:
+      id:
+        type: string
+      nickName1:
+        type: string
+      nickName2:
+        type: string
+      crationDate:
+        type: string
+  ChatInput:
+    type: object
+    properties:
+      nickName1:
+        type: string
+      nickName2:
+        type: string
+  listChats:
+    type: array
+    items:
+      $ref: '#/definitions/Chat'
+  Message:
+    type: object
+    properties:
+      id:
+        type: string
+      owner:
+        type: string
+      message:
+        type: string
+      chatId:
+        type: string
+      Date:
+        type: string
+  MessageInput:
+    type: object
+    properties:
+      owner:
+        type: string
+      message:
+        type: string
+      chatId: 
+        type: string
+  listMessage:
+    type: array
+    items:
+      $ref: '#/definitions/Message'
+  Error:
+    type: object
+    properties:
+      message:
+        type: string
+      

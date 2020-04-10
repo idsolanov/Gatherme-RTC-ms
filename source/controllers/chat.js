@@ -17,12 +17,11 @@ function getChatbynicknames(req,res){
 }
 
 function getChatsbynickName(req,res){
-    let nickname = req.body.nickName
+    let nickname = req.params.nickName
     let c1,c2
     Chat.find({nickName1:nickname},(err,chats1)=>{
         if(err) return res.status(500).send({message: `error en el servidor ${err}`})
-        if(!chats1) return res.status(404).send({message: 'no se encontraron chats'})
-
+        if(!chats1) c1=chats1
         c1=chats1
     })
     Chat.find({nickName2:nickname},(err,chats2)=>{
@@ -38,7 +37,7 @@ function getChatsbynickName(req,res){
 }
 
 function getChatbyId(req,res){
-    let chatId= req.body._id
+    let chatId= req.params._id
 
     Chat.findById(chatId,(err,chat)=>{
         if(err) return res.status(500).send({message: `error en el servidor ${err}`})
@@ -56,7 +55,7 @@ function createChat(req,res){
 
     Chat.find({nickName1:req.body.nickName1,nickName2:req.body.nickName2},(err,chat)=>{
         if(err) return res.status(500).send({message: `error en el servidor ${err}`})
-        if(chat)return res.status(500).send({message:'el chat ya existe'})
+        if(chat)return res.status(503).send({message:'el chat ya existe'})
 
         chat.save((err,chatStrored) =>{
             if(err) res.status(500).send({message: `error al salvar en la base de datos: ${err}`})
@@ -69,7 +68,7 @@ function createChat(req,res){
 }
 
 function deleteChatbyId(req,res){
-    let ChatId = req.bedy.ChatId
+    let ChatId = req.params.ChatId
     Chat.findById(ChatId,(err,chat)=>{
         if(err) return res.status(500).send({message:'error al conectar con el servidor'})
         if(!chat) return res.status(404).send({message:'el chat no existe'})
